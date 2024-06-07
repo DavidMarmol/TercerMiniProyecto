@@ -28,13 +28,8 @@ public class VistaJuegoGUI extends JFrame implements VistaJuego {
         botonJugar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int jugadaHumano = comboBoxJugada.getSelectedIndex();
-                int jugadaComputadora = juego.generarJugadaComputadora();
-                mostrarJugadas(juego.jugadaToString(jugadaHumano), juego.jugadaToString(jugadaComputadora));
-                mostrarResultadoRonda(juego.determinarGanador(jugadaHumano, jugadaComputadora));
-                mostrarPuntaje(juego.getPuntajeHumano(), juego.getPuntajeComputadora());
-                if (juego.getPuntajeHumano() == 3 || juego.getPuntajeComputadora() == 3) {
-                    mostrarResultadoFinal(juego.determinarGanadorFinal());
+                synchronized (VistaJuegoGUI.this) {
+                    VistaJuegoGUI.this.notify();
                 }
             }
         });
@@ -62,8 +57,12 @@ public class VistaJuegoGUI extends JFrame implements VistaJuego {
     }
 
     @Override
-    public int obtenerEleccionJugador() {
-        // No se utiliza en la GUI ya que se maneja por eventos
+    public synchronized int obtenerEleccionJugador() {
+        try {
+            wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return comboBoxJugada.getSelectedIndex();
     }
 
