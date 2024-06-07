@@ -8,4 +8,3 @@ public interface VistaJuego {
     void mostrarResultadoFinal(String resultadoFinal);
     void mostrarMensaje(String mensaje);
 }
-
